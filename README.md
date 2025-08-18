@@ -1,4 +1,7 @@
 # POST-KeyLogger
+
+![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
+
 A program that sends text written by the user to a specified endpoint using POST requests.
 
 ## ⭐ Пожалуйста, ставьте звёзды на мои проекты если они вам понравились, звёзды будут продвигать репозитории, чтобы о них узнало больше человек. ⭐
