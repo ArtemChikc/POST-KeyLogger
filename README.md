@@ -29,4 +29,4 @@ pip install pynput keyboard
 ONE FILE | NO WINDOW
 ```
 
-4. После запуска программы на каком-либо компьютере и ввода текста с клавиатуры на сервере возле файла [endpoint_server.py](https://github.com/ArtemChikc/POST-KeyLogger/blob/main/endpoint_server.py) появится папка с логами различных компьютеров.
+4. После запуска программы на каком-либо компьютере и ввода текста с клавиатуры на сервере возле файла [endpoint_server.py](https://github.com/ArtemChikc/POST-KeyLogger/blob/main/endpoint_server.py) появится папка с логами ввода различных компьютеров жертв.
